@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class TestWidgetPage extends StatefulWidget {
   @override
@@ -46,13 +45,13 @@ class TestWidgetPageState extends State<TestWidgetPage> {
           ),
           body: Container(
             child: Center(
-              child: StaggeredGridView.countBuilder(
-                crossAxisCount: 2,
+              child: GridView.builder(
                 itemCount: widgetList.length,
                 itemBuilder: (context, index) => widgetList[index],
-                staggeredTileBuilder: (index) => StaggeredTile.count(1, 1),
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0),
               ),
             ),
           ),

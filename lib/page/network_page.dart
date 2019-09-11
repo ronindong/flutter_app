@@ -6,7 +6,6 @@ import 'package:flutter_app/base/theme.dart';
 import 'package:flutter_app/bean/gank_today_bean.dart';
 import 'package:flutter_app/widget/BackWidget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'web_load_page.dart';
 
@@ -120,14 +119,14 @@ class _NetworkPageState extends State<NetworkPage>
         children: tabs.map((tab) {
           List<dynamic> data = this.jsonData.results[tab.text];
           return Center(
-            child: StaggeredGridView.countBuilder(
-              crossAxisCount: 2,
+            child: GridView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) =>
                   _itemWidget(context, index, data),
-              staggeredTileBuilder: (index) => StaggeredTile.count(1, 1),
-              crossAxisSpacing: 5.0,
-              mainAxisSpacing: 5.0,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10.0,
+                  crossAxisSpacing: 10.0),
             ),
           );
         }).toList(),

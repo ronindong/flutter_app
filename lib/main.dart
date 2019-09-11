@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'base/theme.dart';
@@ -121,15 +120,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Center(
-          child: StaggeredGridView.countBuilder(
-            crossAxisCount: 2,
-            itemCount: datas.length,
-            itemBuilder: (context, index) => _itemWidget(context, index),
-            staggeredTileBuilder: (index) => StaggeredTile.count(1, 1),
-            crossAxisSpacing: 5.0,
-            mainAxisSpacing: 5.0,
-          ),
+        child: GridView.builder(
+          itemCount: datas.length,
+          itemBuilder: (context, index) => _itemWidget(context, index),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, mainAxisSpacing: 10.0, crossAxisSpacing: 10.0),
         ),
       ),
       floatingActionButton: FloatingActionButton(
