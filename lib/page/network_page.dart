@@ -62,34 +62,37 @@ class _NetworkPageState extends State<NetworkPage>
   Widget _itemWidget(BuildContext context, int index, List<dynamic> data) {
     if (index < data.length) {
       var itemData = ResultBean.fromJson(data[index]);
-      return GestureDetector(
-        child: Container(
-          color: Colors.indigoAccent,
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  itemData.desc,
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
-                  maxLines: 3,
-                ),
-                Text(
-                  itemData.url,
-                  style: textStyleWhite,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Text(
-                    itemData.publishedAt,
-                    textAlign: TextAlign.right,
-                    style: textStyleWhite,
+      return SafeArea(
+        child: GestureDetector(
+          child: Container(
+            color: Colors.indigoAccent,
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    itemData.desc,
+                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                    maxLines: 3,
                   ),
-                )
-              ],
+                  Text(
+                    itemData.url,
+                    style: textStyleWhite,
+                    maxLines: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Text(
+                      itemData.publishedAt,
+                      textAlign: TextAlign.right,
+                      style: textStyleWhite,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
+          onTap: () => _onItemClick(index, itemData),
         ),
-        onTap: () => _onItemClick(index, itemData),
       );
     }
     return Text("❎");
