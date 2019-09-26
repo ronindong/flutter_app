@@ -33,17 +33,17 @@ class TestWidgetPageState extends State<TestWidgetPage> {
     return buildWillPopScope(context);
   }
 
-  WillPopScope buildWillPopScope(BuildContext context) {
-    return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text("Button simple"),
-            actions: <Widget>[
-              IconButton(icon: Icon(Icons.search), onPressed: () {}),
-              IconButton(icon: Icon(Icons.more_horiz), onPressed: () {}),
-            ],
-          ),
-          body: Container(
+  buildWillPopScope(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Button simple"),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed: () {}),
+          IconButton(icon: Icon(Icons.more_horiz), onPressed: () {}),
+        ],
+      ),
+      body: WillPopScope(
+          child: Container(
             child: Center(
               child: GridView.builder(
                 itemCount: widgetList.length,
@@ -55,10 +55,11 @@ class TestWidgetPageState extends State<TestWidgetPage> {
               ),
             ),
           ),
-        ),
-        onWillPop: () {
-          Navigator.of(context).pop("TestWidgetPage dispose");
-        });
+          onWillPop: () async {
+            Navigator.of(context).pop("TestWidgetPage dispose");
+            return false;
+          }),
+    );
   }
 
   Widget getButton() {
@@ -92,29 +93,30 @@ class TestWidgetPageState extends State<TestWidgetPage> {
   Widget getDropDownButton() {
     return Container(
       color: Colors.brown,
-      child: Center(
-          child: DropdownButton(
-              items: [
-            DropdownMenuItem(
-              child: Text("item1"),
-              value: 'donghl',
-            ),
-            DropdownMenuItem(
-              child: Text("item2"),
-              value: '1234',
-            ),
-          ],
-              hint: Text(
-                "选择姓名",
-                style: TextStyle(color: Colors.white),
-              ),
-              value: nameValue,
-              onChanged: (t) {
-                print(t);
-                setState(() {
-                  nameValue = t;
-                });
-              })),
+      child: Builder(
+          builder: (context) => Center(
+                  child: DropdownButton(
+                      items: [
+                    DropdownMenuItem(
+                      child: Text("donghl"),
+                      value: 'donghl',
+                    ),
+                    DropdownMenuItem(
+                      child: Text("1234"),
+                      value: '1234',
+                    ),
+                  ],
+                      hint: Text(
+                        "选择姓名",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      value: nameValue,
+                      onChanged: (t) {
+                        print(t);
+                        setState(() {
+                          nameValue = t;
+                        });
+                      }))),
     );
   }
 

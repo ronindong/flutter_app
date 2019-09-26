@@ -1,7 +1,7 @@
-import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/page/anim_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'base/theme.dart';
@@ -38,6 +38,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<ItemWidgetBean> datas = [];
   dynamic connectivity;
+  bool isOpenSwitchPage = false;
+  DateTime backTime;
 
   void _initData() {
     Future.delayed(Duration(milliseconds: 0)).then((e) {
@@ -46,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
             name: "基础Widget", iconData: Icons.widgets, page: TestWidgetPage()));
         datas.add(ItemWidgetBean(
             name: "网络库Dio", iconData: Icons.http, page: NetworkPage()));
+        datas.add(ItemWidgetBean(
+            name: "动画", iconData: Icons.all_out, page: AnimPage()));
       });
     });
   }
@@ -105,10 +109,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onItemClick(int index, ItemWidgetBean itemData) {
     print("pos=+$index");
-    Navigator.push(context, MaterialPageRoute(builder: (_) => itemData.page))
-        .then((value) {
-      print(value);
-    });
+    if (isOpenSwitchPage) {
+      Navigator.push(context, CupertinoPageRoute(builder: (_) => itemData.page))
+          .then((value) {
+        print(value);
+      });
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => itemData.page))
+          .then((value) {
+        print(value);
+      });
+    }
   }
 
   @override
@@ -116,22 +127,51 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          Switch(
+              value: isOpenSwitchPage,
+              activeColor: Colors.amberAccent,
+              onChanged: (value) {
+                setState(() {
+                  isOpenSwitchPage = value;
+                });
+              })
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: GridView.builder(
-          itemCount: datas.length,
-          itemBuilder: (context, index) => _itemWidget(context, index),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, mainAxisSpacing: 10.0, crossAxisSpacing: 10.0),
-        ),
-      ),
+      body: Builder(
+          builder: (context) => WillPopScope(
+                child: Center(
+                  // Center is a layout widget. It takes a single child and positions it
+                  // in the middle of the parent.
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.builder(
+                      itemCount: datas.length,
+                      itemBuilder: (context, index) =>
+                          _itemWidget(context, index),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0),
+                    ),
+                  ),
+                ),
+                onWillPop: () async {
+                  if (backTime == null ||
+                      DateTime.now().difference(backTime) >
+                          Duration(seconds: 1)) {
+                    backTime = DateTime.now();
+                    Scaffold.of(context)
+                        .showSnackBar(SnackBar(content: Text("再点一次退出"),));
+                    return false;
+                  }
+                  return true;
+                },
+              )),
       floatingActionButton: FloatingActionButton(
         onPressed: null,
         tooltip: 'Increment',
-        child:
-            Platform.isAndroid ? Icon(Icons.android) : Icon(Icons.tablet_mac),
+        child: isOpenSwitchPage ? Icon(Icons.tablet_mac) : Icon(Icons.android),
       ),
     );
   }
