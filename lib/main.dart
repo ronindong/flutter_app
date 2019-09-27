@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/page/anim_page.dart';
+import 'package:flutter_app/page/test_share_data_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'base/theme.dart';
@@ -50,6 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
             name: "网络库Dio", iconData: Icons.http, page: NetworkPage()));
         datas.add(ItemWidgetBean(
             name: "动画", iconData: Icons.all_out, page: AnimPage()));
+        datas.add(ItemWidgetBean(
+            name: "动画", iconData: Icons.shuffle, page: TestShareDataPage()));
       });
     });
   }
@@ -127,16 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        actions: <Widget>[
-          Switch(
-              value: isOpenSwitchPage,
-              activeColor: Colors.amberAccent,
-              onChanged: (value) {
-                setState(() {
-                  isOpenSwitchPage = value;
-                });
-              })
-        ],
+        actions: <Widget>[],
       ),
       body: Builder(
           builder: (context) => WillPopScope(
@@ -161,17 +155,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       DateTime.now().difference(backTime) >
                           Duration(seconds: 1)) {
                     backTime = DateTime.now();
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text("再点一次退出"),));
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("再点一次退出"),
+                    ));
                     return false;
                   }
                   return true;
                 },
               )),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Increment',
-        child: isOpenSwitchPage ? Icon(Icons.tablet_mac) : Icon(Icons.android),
+        onPressed: () {
+          setState(() {
+            isOpenSwitchPage = !isOpenSwitchPage;
+          });
+        },
+        tooltip: 'switch page back anim',
+        child:
+            isOpenSwitchPage ? Icon(Icons.phone_iphone) : Icon(Icons.android),
       ),
     );
   }
