@@ -4,8 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/base/theme.dart';
 import 'package:flutter_app/bean/gank_today_bean.dart';
+import 'package:flutter_app/provide/ThemeProvide.dart';
 import 'package:flutter_app/widget/BackWidget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provide/provide.dart';
 
 import 'web_load_page.dart';
 
@@ -65,7 +67,7 @@ class _NetworkPageState extends State<NetworkPage>
       return SafeArea(
         child: GestureDetector(
           child: Container(
-            color: Colors.indigoAccent,
+            color: Provide.value<ThemeProvide>(context).themeColor,
             child: Center(
               child: Column(
                 children: <Widget>[
@@ -114,7 +116,7 @@ class _NetworkPageState extends State<NetworkPage>
     Widget bodyWidget;
     if (jsonData == null) {
       bodyWidget = SpinKitCircle(
-        color: Colors.cyanAccent,
+        color: Provide.value<ThemeProvide>(context).themeColor,
         size: 50.0,
       );
     } else {
@@ -139,7 +141,7 @@ class _NetworkPageState extends State<NetworkPage>
     return Scaffold(
       appBar: AppBar(
           leading: BackWidget(
-            child: Icon(Icons.arrow_back),
+            child: const Icon(Icons.arrow_back),
           ),
           title: Text('GankIO API'),
           bottom: tabs.length < 1

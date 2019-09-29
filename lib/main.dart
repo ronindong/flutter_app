@@ -1,39 +1,59 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/base/theme.dart';
 import 'package:flutter_app/page/anim_page.dart';
 import 'package:flutter_app/page/test_share_data_page.dart';
+import 'package:flutter_app/provide/ThemeProvide.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provide/provide.dart';
 
-import 'base/theme.dart';
 import 'bean/item_widget_bean.dart';
-import 'page/network_page.dart';
+import 'page/gank_io_page.dart';
 import 'page/test_widget_page.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  var themeProvide = ThemeProvide();
+  var provides = Providers();
+
+  provides..provide(Provider.function((context) => themeProvide));
+
+  runApp(ProviderNode(child: MyApp(), providers: provides));
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    Color themeColor = getRandomColor();
+    Provide.value<ThemeProvide>(context).changeThemeColor(themeColor);
+    return Provide<ThemeProvide>(
+      builder: (context, child, scope) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+              primaryColor: Provide.value<ThemeProvide>(context).themeColor,
+              iconTheme: IconThemeData(
+                  color: Provide.value<ThemeProvide>(context).themeColor)),
+          debugShowCheckedModeBanner: false,
+          home: MyHomePage(
+            title: 'Flutter Demo Home Page',
+            themeColor: themeColor,
+          ),
+        );
+      },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   final String title;
+  final Color themeColor;
 
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.themeColor}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(this.themeColor);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -41,6 +61,9 @@ class _MyHomePageState extends State<MyHomePage> {
   dynamic connectivity;
   bool isOpenSwitchPage = false;
   DateTime backTime;
+  Color themeColor;
+
+  _MyHomePageState(this.themeColor);
 
   void _initData() {
     Future.delayed(Duration(milliseconds: 0)).then((e) {
@@ -52,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
         datas.add(ItemWidgetBean(
             name: "动画", iconData: Icons.all_out, page: AnimPage()));
         datas.add(ItemWidgetBean(
-            name: "动画", iconData: Icons.shuffle, page: TestShareDataPage()));
+            name: "数据共享", iconData: Icons.shuffle, page: TestShareDataPage()));
       });
     });
   }
@@ -85,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIos: 1,
-          backgroundColor: themeList[2],
+          backgroundColor: themeColor,
           textColor: Colors.white,
           fontSize: 16.0);
     });
@@ -93,15 +116,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _itemWidget(BuildContext context, int index) {
     if (index < datas.length) {
-      var itemData = datas[index];
+      ItemWidgetBean itemData = datas[index];
       return GestureDetector(
         child: Container(
-          color: Colors.indigo,
+          color: this.themeColor,
           child: Center(
-            child: CircleAvatar(
-              backgroundColor: Colors.lightGreenAccent,
-              child: Icon(itemData.iconData),
-            ),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundColor: Colors.lime,
+                    child: Icon(itemData.iconData),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "${itemData.name}",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ]),
           ),
         ),
         onTap: () => _onItemClick(index, itemData),
@@ -130,6 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        iconTheme: IconThemeData(color: themeColor),
         actions: <Widget>[],
       ),
       body: Builder(
@@ -157,6 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     backTime = DateTime.now();
                     Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text("再点一次退出"),
+                      backgroundColor: themeColor,
                     ));
                     return false;
                   }
@@ -164,12 +200,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               )),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: themeColor,
         onPressed: () {
           setState(() {
+            themeColor = getRandomColor();
+            Provide.value<ThemeProvide>(context).changeThemeColor(themeColor);
             isOpenSwitchPage = !isOpenSwitchPage;
           });
         },
-        tooltip: 'switch page back anim',
+        tooltip: 'switch theme style',
         child:
             isOpenSwitchPage ? Icon(Icons.phone_iphone) : Icon(Icons.android),
       ),

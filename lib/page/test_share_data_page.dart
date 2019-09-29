@@ -16,7 +16,7 @@ class _TestShareDataPageState extends State<TestShareDataPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: BackWidget(
-            child: Icon(Icons.arrow_back),
+            child: const Icon(Icons.arrow_back),
           ),
           title: Text("Flutter share Data"),
         ),

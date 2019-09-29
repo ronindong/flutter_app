@@ -108,7 +108,7 @@ class _AnimPageState extends State<AnimPage>
 
 class AnimImage extends AnimatedWidget {
   AnimImage({Key key, Animation<double> animation})
-      : super(key: key, listenable: animation) {}
+      : super(key: key, listenable: animation);
 
   @override
   Widget build(BuildContext context) {

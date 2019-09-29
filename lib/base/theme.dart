@@ -1,11 +1,11 @@
 /**
  * 主题选项
- * Create by Songlcy
  */
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 final List<Color> themeList = [
-  Colors.black,
   Colors.red,
   Colors.teal,
   Colors.pink,
@@ -19,9 +19,10 @@ final List<Color> themeList = [
   Colors.indigo,
   Colors.cyan,
   Colors.brown,
-  Colors.grey,
   Colors.blueGrey
 ];
+
+Color getRandomColor() => themeList[Random().nextInt(themeList.length)];
 
 final TextStyle textStyleWhite = TextStyle(
   color: Colors.white,

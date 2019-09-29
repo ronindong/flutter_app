@@ -8,7 +8,7 @@ class ItemWidgetBean {
   ItemWidgetBean(
       {@required String name,
       @required IconData iconData,
-      @required StatefulWidget page}) {
+      @required Widget page}) {
     this.name = name;
     this.iconData = iconData;
     this.page = page;

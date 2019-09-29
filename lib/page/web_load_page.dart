@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebLoadPage extends StatefulWidget {
-  ResultBean data;
+  final ResultBean data;
 
   WebLoadPage({Key key, this.data}) : super(key: key);
 
@@ -50,7 +50,7 @@ class WebLoadPageState extends State<WebLoadPage> {
     return Scaffold(
       appBar: AppBar(
         leading: BackWidget(
-          child: Icon(Icons.arrow_back),
+          child: const Icon(Icons.arrow_back),
         ),
         title: Text(
           this.data.desc,
