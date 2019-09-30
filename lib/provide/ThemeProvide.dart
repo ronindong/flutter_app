@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ThemeProvide with ChangeNotifier {
-  Color _themeColor = Colors.blue;
+  Color _themeColor;
 
   ThemeProvide();
 
