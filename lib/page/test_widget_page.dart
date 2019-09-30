@@ -93,8 +93,8 @@ class TestWidgetPageState extends State<TestWidgetPage> {
   Widget getDropDownButton() {
     return Container(
       color: Colors.brown,
-      child: Builder(
-          builder: (context) => Center(
+      child: StatefulBuilder(
+          builder: (context, _setState) => Center(
                   child: DropdownButton(
                       items: [
                     DropdownMenuItem(
@@ -113,7 +113,7 @@ class TestWidgetPageState extends State<TestWidgetPage> {
                       value: nameValue,
                       onChanged: (t) {
                         print(t);
-                        setState(() {
+                        _setState(() {
                           nameValue = t;
                         });
                       }))),
