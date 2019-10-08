@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/bean/gank_today_bean.dart';
+import 'package:flutter_app/provide/ThemeProvide.dart';
 import 'package:flutter_app/widget/BackWidget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provide/provide.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebLoadPage extends StatefulWidget {
@@ -40,7 +42,7 @@ class WebLoadPageState extends State<WebLoadPage> {
         Offstage(
           offstage: isLoadFinish,
           child: SpinKitCircle(
-            color: Colors.cyanAccent,
+            color: Provide.value<ThemeProvide>(context).themeColor,
             size: 50.0,
           ),
         )
